@@ -32,7 +32,7 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
 #include <sys/time.h>
 #include <sys/types.h>
-
+#include <errno.h>
 #ifndef LINUX
 #include <sys/filio.h>
 #endif
@@ -163,14 +163,14 @@ myioctl
   int*	arg )
 {   
     int		rc;
-    extern int	errno;
     
     rc = ioctl(fd, command, arg);  
+	write ( fd , &command , sizeof ( command ) ) ;
     if (rc < 0)
     {
 	fprintf(stderr, "ioctl(dsp,%d,arg) failed\n", command);
 	fprintf(stderr, "errno=%d\n", errno);
-	exit(-1);
+//	exit(-1);
     }
 }
 
@@ -767,7 +767,7 @@ I_InitSound()
   // Secure and configure sound device first.
   fprintf( stderr, "I_InitSound: ");
   
-  audio_fd = open("/dev/dsp", O_WRONLY);
+  audio_fd = open("/dev/dsp", O_RDWR);
   if (audio_fd<0)
     fprintf(stderr, "Could not open /dev/dsp\n");
   
