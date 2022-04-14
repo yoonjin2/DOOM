@@ -6,9 +6,9 @@
 #
 CC=  gcc  # gcc or g++
 
-CFLAGS=-g -Wall -DNORMALUNIX -m32 -DLINUX -DSNDSERV -DSNDSRV #-DUSEASM 
+CFLAGS=-g -Wall -DNORMALUNIX -m32 -DLINUX # -DUSEASM 
 LDFLAGS=-L/usr/X11R6/lib
-LIBS=-lXext -lX11 -lnsl -lm 
+LIBS=-lXext -lX11 -lnsl -lm
 
 # subdirectory for objects
 O=linux
@@ -77,8 +77,7 @@ OBJS=				\
 		$(O)/info.o				\
 		$(O)/sounds.o
 
-all:
-	$(O)/linuxxdoom
+all:	 $(O)/linuxxdoom
 
 clean:
 	rm -f *.o *~ *.flc
