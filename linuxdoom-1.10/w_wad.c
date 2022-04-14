@@ -76,7 +76,7 @@ int filelength (int handle)
     struct stat	fileinfo;
     
     if (fstat (handle,&fileinfo) == -1)
-	I_Error ("Error fstating");
+	printf ("Error fstating\n");
 
     return fileinfo.st_size;
 }
@@ -107,7 +107,7 @@ ExtractFileBase
     while (*src && *src != '.')
     {
 	if (++length == 9)
-	    I_Error ("Filename base of %s >8 chars",path);
+	    printf ("Filename base of %s >8 chars\n",path);
 
 	*dest++ = toupper((int)*src++);
     }
@@ -187,7 +187,7 @@ void W_AddFile (char *filename)
 	    // Homebrew levels?
 	    if (strncmp(header.identification,"PWAD",4))
 	    {
-		I_Error ("Wad file %s doesn't have IWAD "
+		printf ("Wad file %s doesn't have IWAD "
 			 "or PWAD id\n", filename);
 	    }
 	    
@@ -207,7 +207,7 @@ void W_AddFile (char *filename)
     lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
 
     if (!lumpinfo)
-	I_Error ("Couldn't realloc lumpinfo");
+	printf ("Couldn't realloc lumpinfo\n");
 
     lump_p = &lumpinfo[startlump];
 	
@@ -247,7 +247,7 @@ void W_Reload (void)
 	return;
 		
     if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	I_Error ("W_Reload: couldn't open %s",reloadname);
+	printf ("W_Reload: couldn't open %s\n",reloadname);
 
     read (handle, &header, sizeof(header));
     lumpcount = LONG(header.numlumps);
@@ -303,14 +303,14 @@ void W_InitMultipleFiles (char** filenames)
 	W_AddFile (*filenames);
 
     if (!numlumps)
-	I_Error ("W_InitFiles: no files found");
+	printf ("W_InitFiles: no files found\n");
     
     // set up caching
     size = numlumps * sizeof(*lumpcache);
     lumpcache = malloc (size);
     
     if (!lumpcache)
-	I_Error ("Couldn't allocate lumpcache");
+	printf ("Couldn't allocate lumpcache\n");
 
     memset (lumpcache,0, size);
 }
@@ -403,7 +403,7 @@ int W_GetNumForName (char* name)
     i = W_CheckNumForName (name);
     
     if (i == -1)
-      I_Error ("W_GetNumForName: %s not found!", name);
+      printf ("W_GetNumForName: %s not found!\n", name);
       
     return i;
 }
@@ -416,7 +416,7 @@ int W_GetNumForName (char* name)
 int W_LumpLength (int lump)
 {
     if (lump >= numlumps)
-	I_Error ("W_LumpLength: %i >= numlumps",lump);
+	printf ("W_LumpLength: %i >= numlumps",lump);
 
     return lumpinfo[lump].size;
 }
@@ -438,7 +438,7 @@ W_ReadLump
     int		handle;
 	
     if (lump >= numlumps)
-	I_Error ("W_ReadLump: %i >= numlumps",lump);
+	printf ("W_ReadLump: %i >= numlumps\n",lump);
 
     l = lumpinfo+lump;
 	
@@ -448,7 +448,7 @@ W_ReadLump
     {
 	// reloadable file, so use open / read / close
 	if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
+	    printf ("W_ReadLump: couldn't open %s\n",reloadname);
     }
     else
 	handle = l->handle;
@@ -457,7 +457,7 @@ W_ReadLump
     c = read (handle, dest, l->size);
 
     if (c < l->size)
-	I_Error ("W_ReadLump: only read %i of %i on lump %i",
+	printf ("W_ReadLump: only read %i of %i on lump %i",
 		 c,l->size,lump);	
 
     if (l->handle == -1)
@@ -480,7 +480,7 @@ W_CacheLumpNum
     byte*	ptr;
 
     if ((unsigned)lump >= numlumps)
-	I_Error ("W_CacheLumpNum: %i >= numlumps",lump);
+	printf ("W_CacheLumpNum: %i >= numlumps\n",lump);
 		
     if (!lumpcache[lump])
     {

@@ -610,7 +610,7 @@ void IdentifyVersion (void)
 
     home = getenv("HOME");
     if (!home)
-      I_Error("Please set $HOME to your home directory");
+      printf("Please set $HOME to your home directory\n");
     sprintf(basedefault, "%s/.doomrc", home);
 #endif
 
@@ -711,9 +711,8 @@ void IdentifyVersion (void)
     printf("Game mode indeterminate.\n");
     gamemode = indetermined;
 
-    // We don't abort. Let's see what the PWAD contains.
-    //exit(1);
-    //I_Error ("Game mode indeterminate\n");
+     //We don't abort. Let's see what the PWAD contains.
+    printf ("Game mode indeterminate\n");
 }
 
 //
@@ -741,8 +740,7 @@ void FindResponseFile (void)
 	    handle = fopen (&myargv[i][1],"rb");
 	    if (!handle)
 	    {
-		printf ("\nNo such response file!");
-		exit(1);
+		printf ("\nNo such response file!\n");
 	    }
 	    printf("Found response file %s!\n",&myargv[i][1]);
 	    fseek (handle,0,SEEK_END);
@@ -1035,15 +1033,15 @@ void D_DoomMain (void)
 	int i;
 	
 	if ( gamemode == shareware)
-	    I_Error("\nYou cannot -file with the shareware "
+	    printf("\nYou cannot -file with the shareware "
 		    "version. Register!");
 
-	// Check for fake IWAD with right name,
-	// but w/o all the lumps of the registered version. 
+	 //Check for fake IWAD with right name,
+	 //but w/o all the lumps of the registered version. 
 	if (gamemode == registered)
-	    for (i = 0;i < 23; i++)
+	   for (i = 0;i < 23; i++)
 		if (W_CheckNumForName(name[i])<0)
-		    I_Error("\nThis is not the registered version.");
+		    printf("\nThis is not the registered version.\n");
     }
     
     // Iff additonal PWAD files are used, print modified banner
